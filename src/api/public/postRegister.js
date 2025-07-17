@@ -4,7 +4,7 @@ import { IsValid } from "../../lib/IsValid.js"; // Importuojama duomenų validav
 import { randomString } from "../../lib/randomString.js"; // Importuojama atsitiktinių stringų generavimo funkcija
 
 export async function postRegister(req, res) { // Eksportuojama asinchroninė funkcija registracijai
-    const [err, msg] = IsValid.fields(req.body, { // Validuojami gaunami request body laukai
+    const [err, msg] = IsValid.fields(req.body, { // Validuojami gaunami request body laukai jie ateina is Isvalid clases, metodai sukurti statiniai
         username: 'username', // Naudojamas username validavimo taisyklių rinkinys
         email: 'email',       // Naudojamas email validavimo rinkinys
         password: 'password', // Slaptažodžio validavimas

@@ -12,7 +12,7 @@ if (formDOM) { // Patikrinama, ar forma egzistuoja DOM'e
         };
 
         fetch('/api/login', { // Siunčiama POST užklausa į serverį prisijungimui
-            method: 'POST', // Nurodoma, kad tai POST metodas
+            method: 'POST', // Nurodoma, kad tai POST metodas, kuris naudojamas duomenu issiuntimui. gavimui 
             headers: {
                 'Content-Type': 'application/json', // Nurodo, kad siunčiamas JSON turinys
             },

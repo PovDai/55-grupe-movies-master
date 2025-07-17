@@ -5,6 +5,9 @@ export async function deleteCategories(req, res) { // Eksportuojama asinchronin�
     const [err, msg] = IsValid.fields(req.params, { // Validuojami URL parametrai pagal taisykles
         url: 'nonEmptyString', // Tikrinama, ar 'url' parametras yra ne tuščias tekstas
     });
+    /*🔍
+req.params	Iš URL adreso kintamųjų (pvz., /user/:id)	Naudojama su GET, DELETE, PUT su URL kintamaisiais
+req.body	Iš užklausos kūno (body), pvz., JSON ar formos NAUDOJAMAS SU POST*/
 
     if (err) { // Jei validacija nepraeina (klaida)
         return res.json({ // Grąžinamas JSON su klaidos statusu ir žinute

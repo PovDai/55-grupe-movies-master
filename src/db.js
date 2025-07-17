@@ -1,5 +1,4 @@
-// Importuojame 'mysql2/promise' biblioteką, kuri leidžia dirbti su MySQL naudojant Promise API
-// Tai patogiau nei tradiciniai callback'ai, nes galima naudoti async/await sintaksę
+// Importuojame 'mysql2/promise' biblioteką, kuri leidžia dirbti su MySQL naudojant Promise API galima naudoti async/await sintaksę
 import mysql from 'mysql2/promise';
 
 // Importuojame konfigūraciją iš 'env.js' (duomenų bazės prisijungimo duomenys)

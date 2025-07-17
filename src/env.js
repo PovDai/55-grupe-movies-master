@@ -2,7 +2,13 @@
 import dotenv from 'dotenv';
 
 // Gauname visus argumentus, perduotus per komandų eilutę, praleidžiant pirmuosius du (node ir skripto pavadinimą)
-const argList = process.argv.slice(2);
+const argList = process.argv.slice(2); 
+/*[ process.argv slepiasi sis mazdaug masyvas 
+  '/usr/local/bin/node',     // 0: Node.js kelias
+  '/home/user/index.js',     // 1: Tavo skripto kelias
+  '--env=dev',               // 2: argumentas nr. 1
+  '--port=1234'              // 3: argumentas nr. 2
+]*/
 
 // Sukuriame tuščią objektą, kuriame saugosime argumentus kaip raktas:reikšmė
 const args = {};
@@ -17,6 +23,17 @@ for (const str of argList) {
         // Jei taip, pašaliname pirmuosius du simbolius '--' iš rakto ir išsaugome reikšmę args objekte
         // Pvz. '--env=dev' => args['env'] = 'dev'
         args[key.slice(2)] = value;
+        /*Tada:
+
+argList bus: ['--env=dev']
+
+key = '--env'
+
+value = 'dev'
+
+key.slice(2) → 'env'
+
+Todėl args.env = 'dev'*/
     }
 }
 

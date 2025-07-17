@@ -37,9 +37,22 @@ export async function putCategories(req, res) { // Eksportuojama asinchroninė f
             SET title = ?, url_slug = ?, description = ?, status_id = (
                 SELECT id FROM general_status WHERE name = ?
             )
-            WHERE url_slug = ?`; // SQL užklausa atnaujinti kategorijos duomenis pagal originalų url_slug
-        const [response] = await connection.execute(sql, [title, url, description, status, original_url]); // Vykdoma užklausa su parametrais
+            WHERE url_slug = ?`;
+        // SQL užklausa atnaujinti kategorijos duomenis pagal originalų url_slug
+        // Vykdome SQL užklausą į MySQL duomenų bazę asinchroniškai.
+        // `connection.execute(...)` grąžina masyvą su rezultatais (pvz., paveiktos eilutės informacija).
+        // Naudojame `await`, kad palauktume, kol SQL užklausa bus įvykdyta.
+        // Iš rezultato paimame tik pirmą dalį – `response` (dažniausiai tai objektas su paveiktų eilučių info).
+const [response] = await connection.execute(
+    sql, // SQL užklausa (pvz. "UPDATE categories SET title = ?, url_slug = ?, ... WHERE url_slug = ?")
+    [title, url, description, status, original_url] // Parametrai, kurie saugiai įstatomi vietoj ? SQL'e
+);
+        /*{ galimos eilutes 
+  affectedRows: 1,
+  changedRows: 1,
+  insertId: 0,
 
+}*/
         if (response.affectedRows !== 1) { // Jei nebuvo atnaujinta būtent viena eilutė
             return res.status(500).json({ // Grąžinama klaida
                 status: 'error',

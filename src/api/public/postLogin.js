@@ -4,6 +4,11 @@ import { hash } from "../../lib/hash.js"; // Importuojama funkcija slaptažodži
 import { IsValid } from "../../lib/IsValid.js"; // Importuojama validavimo biblioteka
 import { randomString } from "../../lib/randomString.js"; // Importuojama funkcija atsitiktiniam string generavimui
 
+/*{ KAS SLIEPIASI REQ.BODY  
+  "username": "zuikis",
+  "email": "zuikis@example.com",
+  "password": "123456"
+}*/
 export async function postLogin(req, res) { // Eksportuojama asinchroninė funkcija prisijungimui
     const [err, msg] = IsValid.fields(req.body, { // Validuojami gaunami duomenys iš request body
         usernameOrEmail: 'nonEmptyString', // username arba email turi būti ne tuščias tekstas
@@ -21,7 +26,7 @@ export async function postLogin(req, res) { // Eksportuojama asinchroninė funkc
     let userObj = null; // Inicializuojamas kintamasis vartotojo duomenims saugoti
 
     try {
-        const sql = `SELECT * FROM users WHERE username = ? OR email = ?;`; // SQL užklausa ieškoti vartotojo pagal username arba email
+        const sql = `SELECT * FROM users WHERE username = ? OR email = ?;`; // SQL užklausa ieškoti vartotojo pagal username arba email ? reikalingi del injekciju apsaugoti sql
         const [response] = await connection.execute(sql, [usernameOrEmail, usernameOrEmail]); // Vykdoma užklausa su parametrais
 
         if (response.length === 0) { // Jei vartotojas nerastas
