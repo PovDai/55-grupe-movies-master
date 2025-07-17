@@ -1,9 +1,21 @@
 import { commonHeaderMenuData } from "../data/headerData.js";
 import { sidebarMenuData } from "../data/sidebarData.js";
 
+// Sukuriame klasę AdminTemplate, kuri gali būti naudojama kaip bazinė (parent) klasė
+// administracinių puslapių šablonams (template).
 export class AdminTemplate {
+    // Konstruktorius - vykdomas kuriant klasės egzempliorių
+    // Priima vieną parametrą `req`, kuris atitinka Express užklausos objektą
     constructor(req) {
+        // Saugojam užklausos objektą kaip klasės savybę,
+        // kad kitoje klasės dalyje galėtume pasiekti vartotojo duomenis,
+        // sesiją, slapukus ir pan.
         this.req = req;
+
+        // Inicializuojame savybę `pageJS` kaip tuščią eilutę,
+        // kuri vėliau gali būti naudojama nurodyti konkretų JavaScript failą
+        // arba modulį, susijusį su tam tikru administraciniu puslapiu.
+        // Pvz., jeigu tam puslapiui reikia pridėti specialų JS, jį galime įrašyti čia.
         this.pageJS = '';
     }
 
