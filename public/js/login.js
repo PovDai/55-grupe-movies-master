@@ -1,29 +1,29 @@
-const formDOM = document.forms[0];
-const usernameOrEmailDOM = document.getElementById('username_or_email');
-const passwordDOM = document.getElementById('password');
+const formDOM = document.forms[0]; // Paimama pirmoji forma dokumente (login forma)
+const usernameOrEmailDOM = document.getElementById('username_or_email'); // Paimamas naudotojo vardo arba el. pašto įvesties laukas
+const passwordDOM = document.getElementById('password'); // Paimamas slaptažodžio įvesties laukas
 
-if (formDOM) {
-    formDOM.addEventListener('submit', (e) => {
-        e.preventDefault();
+if (formDOM) { // Patikrinama, ar forma egzistuoja DOM'e
+    formDOM.addEventListener('submit', (e) => { // Pridedamas formos submit įvykio klausytojas
+        e.preventDefault(); // Sustabdomas numatytas naršyklės elgesys (puslapio perkrovimas)
 
-        const data = {
-            usernameOrEmail: usernameOrEmailDOM.value,
-            password: passwordDOM.value,
+        const data = { // Kuriamas objektas su prisijungimo duomenimis
+            usernameOrEmail: usernameOrEmailDOM.value, // Įrašo naudotojo vardą arba el. paštą
+            password: passwordDOM.value, // Įrašo slaptažodį
         };
 
-        fetch('/api/login', {
-            method: 'POST',
+        fetch('/api/login', { // Siunčiama POST užklausa į serverį prisijungimui
+            method: 'POST', // Nurodoma, kad tai POST metodas
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json', // Nurodo, kad siunčiamas JSON turinys
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(data), // Duomenų objektas paverčiamas į JSON tekstą
         })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success' && data.action === 'redirect') {
-                    location.href = data.href;
+            .then(res => res.json()) // Serverio atsakymas paverčiamas į JSON objektą
+            .then(data => { // Kai gaunamas atsakymas, tikrinamas jo turinys
+                if (data.status === 'success' && data.action === 'redirect') { // Jei prisijungimas pavyko ir reikia peradresuoti
+                    location.href = data.href; // Naršyklė peradresuojama į nurodytą puslapį
                 }
             })
-            .catch(console.error);
+            .catch(console.error); // Klaidos atveju klaida išvedama į naršyklės konsolę
     });
 }

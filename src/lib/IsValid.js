@@ -1,43 +1,72 @@
 export class IsValid {
+    // Statinis metodas 'fields' - tikrina pateiktus duomenis pagal privalomą ir papildomą schemą
+    // data - objektas su tikrinamais duomenimis
+    // requiredSchema - objektas, kuriame nurodyti privalomi laukai ir jų tikrinimo funkcijų pavadinimai
+    // optionalSchema - objektas, kuriame nurodyti papildomi laukai ir jų tikrinimo funkcijų pavadinimai (pagal nutylėjimą tuščias)
     static fields(data, requiredSchema, optionalSchema = {}) {
+        // Objektas, į kurį kaupsime klaidas
         const errors = {};
+
+        // Sukuriame masyvą su visais galimais raktais - privalomais ir papildomais
+        // Object.keys() grąžina masyvą iš objekto raktų
         const possibleKeys = Object.keys(requiredSchema).concat(Object.keys(optionalSchema));
 
+        // Pirmiausia patikriname, ar data objekte nėra rakto, kurio nėra mūsų schemose
+        // Jeigu yra toks raktas, kurio nėra nei privalomų, nei papildomų laukų, gražiname klaidą iškart
         for (const key in data) {
+            // Jei raktas nėra mūsų galimų raktų sąraše
             if (!possibleKeys.includes(key)) {
+                // Grąžiname klaidą (true reiškia klaidą) su žinute, kad pateiktas neteisingas raktas
                 return [true, 'Ka tu cia dirbi?... Pateikei rakta kuris nera nei tarp privalomu, nei tarp papildomu galimu saraso... 👀👀👀'];
             }
         }
 
+        // Toliau tikriname visus privalomus laukus pagal nurodytas funkcijas
         for (const key in requiredSchema) {
+            // Iš requiredSchema paimame funkcijos pavadinimą, pvz. 'nonEmptyString' ar 'email'
             const funcName = requiredSchema[key];
+
+            // Gauname patikrinimo funkciją iš pačios IsValid klasės (statinės funkcijos)
             const func = IsValid[funcName];
+
+            // Iš duomenų pasiimame vertę pagal raktą
             const value = data[key];
+
+            // Kviesime funkciją, kuri grąžina klaidų bool ir žinutę [err, msg]
             const [err, msg] = func(value);
 
+            // Jeigu klaida, pridedame ją į errors objektą po atitinkamu raktu
             if (err) {
                 errors[key] = msg;
             }
         }
 
+        // Toliau tikriname papildomus laukus - bet jei vertė undefined arba tuščia, praleidžiame (neprivaloma)
         for (const key in optionalSchema) {
             const funcName = optionalSchema[key];
             const func = IsValid[funcName];
             const value = data[key];
 
+            // Jei reikšmė nėra pateikta, tęsiame toliau (praleidžiame patikrinimą)
             if (!value) {
                 continue;
             }
 
+            // Atlikt funkcijos patikrinimą
             const [err, msg] = func(value);
 
+            // Jei klaida, pridedame ją prie errors
             if (err) {
                 errors[key] = msg;
             }
         }
 
+        // Galiausiai grąžiname rezultatą:
+        // - pirmas argumentas: ar klaidų yra (true jei yra, false jei nėra)
+        // - antras argumentas: pats klaidų objektas (tuščias, jei klaidų nėra)
         return [Object.keys(errors).length > 0, errors];
     }
+
 
     static username(text) {
         const minSize = 3;
